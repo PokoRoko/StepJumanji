@@ -1,5 +1,5 @@
 """
-WSGI config for stepik_jumanji project.
+WSGI config for StepikJumanji project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'stepik_jumanji.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'StepikJumanji.settings')
 
 application = get_wsgi_application()

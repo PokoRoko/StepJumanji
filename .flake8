@@ -12,7 +12,7 @@ sections=FUTURE,STDLIB,DJANGO,THIRDPARTY,FIRSTPARTY,LOCALFOLDER
 
 [flake8]
 ignore = E501,F401,F403,F405,W50, E126
-exclude = .git, *migrations*, *settings.py, venv, static, tests, manage.py, tools, MyTestFile.py
+exclude = .git, *migrations*, *settings.py, venv, static, tests, manage.py, tools, data.py
 max-line-length = 120
 max-complexity = 5
 max-cognitive-complexity = 5
