@@ -1,7 +1,11 @@
-from django.http import (Http404, HttpResponseBadRequest,
+from django.http import (HttpResponseBadRequest,
                          HttpResponseForbidden, HttpResponseNotFound,
                          HttpResponseServerError)
-from django.shortcuts import render
+
+from django.db.models import Count
+from django.views.generic import ListView,DetailView,TemplateView
+
+from models import Company, Vacancy, Specialty
 
 
 def custom_handler400(request, exception):
@@ -20,21 +24,53 @@ def custom_handler500(request):
     return HttpResponseServerError('Ошибка сервера!')
 
 
-def index_view(request):
-    return render(request, template_name="index.html")
+class IndexView(TemplateView):
+    template_name = "index.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["specialty"] = Specialty.objects.annotate(count=Count("vacancies"))
+        context["company"] = Company.objects.annotate(count=Count("vacancies"))
+        return context
 
 
-def vacancies_view(request):
-    return render(request, template_name="vacancies.html")
+class ListVacanciesView(ListView):
+    template_name = "vacancies.html"
+    model = Vacancy
+    context_object_name = "vacancy"
+    queryset = model.objects.select_related("specialty", "company")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["vacancies_title"] = "Все вакансии"
 
 
-def specialization_view(request, name_spec):
-    return render(request, template_name="vacancies.html")
+class ListSpecializationView(ListView):
+    template_name = "vacancies.html"
+    model = Vacancy
+    context_object_name = "vacancies"
+
+    def get_queryset(self):
+        return self.model.objects.filter(specialty__code=self.kwargs['specialty']).select_related("specialty","company")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["vacancies_title"] = self.kwargs['specialty']
 
 
-def companies_view(request, id_company):
-    return render(request, template_name="company.html")
+class DetailCompanyViews(DetailView):
+    template_name = "company.html"
+    model = Company
+    context_object_name = "company"
+
+    def get_queryset(self):
+        return self.model.objects.prefetch_related("vacancies", "vacancies__specialty")
 
 
-def vacancy_view(request, id_vacancy):
-    return render(request, template_name="vacancy.html")
+class DetailVacancyView(DetailView):
+    template_name = "vacancy.html"
+    model = Vacancy
+    context_object_name = "vacancy"
+    queryset = model.objects.select_related("specialty", "company")
+
+
