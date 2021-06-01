@@ -30,15 +30,15 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["specialty"] = Specialty.objects.annotate(count=Count("vacancies"))
-        context["company"] = Company.objects.annotate(count=Count("vacancies"))
+        context["companies"] = Company.objects.annotate(count=Count("vacancies"))
         return context
 
 
 class ListVacanciesView(ListView):
-    template_name = "vacancies.html"
     model = Vacancy
     context_object_name = "vacancy"
     queryset = model.objects.select_related("specialty", "company")
+    template_name = "vacancies.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
