@@ -5,7 +5,7 @@ from django.http import (HttpResponseBadRequest,
 from django.db.models import Count
 from django.views.generic import ListView,DetailView,TemplateView
 
-from models import Company, Vacancy, Specialty
+from .models import Company, Vacancy, Specialty
 
 
 def custom_handler400(request, exception):
