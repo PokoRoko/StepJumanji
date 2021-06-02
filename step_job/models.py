@@ -28,11 +28,6 @@ class Vacancy(models.Model):
     salary_max = models.IntegerField()
     published_at = models.DateTimeField(auto_now_add=True, blank=True)
 
-    # Подглядел с вебинара, но уж очень хотелось использовать
-    # def clean(self):
-    #     if self.salary_max > self.salary_min:
-    #         raise ValidationError()
-
 
 def update_data(moc_data):
     for spec in moc_data.specialties:

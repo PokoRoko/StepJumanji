@@ -24,6 +24,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/step_job/templatetags/filters.py">
+          <value>
+            <Attribute>
+              <option name="separator" value=":" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/step_job/views.py">
           <value>
             <Attribute>

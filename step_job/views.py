@@ -36,13 +36,14 @@ class IndexView(TemplateView):
 
 class ListVacanciesView(ListView):
     model = Vacancy
-    context_object_name = "vacancy"
-    queryset = model.objects.select_related("specialty", "company")
+    context_object_name = "vacancies"
     template_name = "vacancies.html"
+    queryset = model.objects.select_related("specialty", "company")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["vacancies_title"] = "Все вакансии"
+        return context
 
 
 class ListSpecializationView(ListView):
