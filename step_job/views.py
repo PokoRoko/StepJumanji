@@ -1,11 +1,9 @@
-from django.http import (HttpResponseBadRequest,
-                         HttpResponseForbidden, HttpResponseNotFound,
-                         HttpResponseServerError)
-
 from django.db.models import Count
-from django.views.generic import ListView,DetailView,TemplateView
+from django.http import (HttpResponseBadRequest, HttpResponseForbidden,
+                         HttpResponseNotFound, HttpResponseServerError)
+from django.views.generic import DetailView, ListView, TemplateView
 
-from .models import Company, Vacancy, Specialty
+from .models import Company, Specialty, Vacancy
 
 
 def custom_handler400(request, exception):
@@ -47,22 +45,23 @@ class ListVacanciesView(ListView):
 
 
 class ListSpecializationView(ListView):
-    template_name = "vacancies.html"
     model = Vacancy
     context_object_name = "vacancies"
+    template_name = "vacancies.html"
 
     def get_queryset(self):
-        return self.model.objects.filter(specialty__code=self.kwargs['specialty']).select_related("specialty","company")
+        return self.model.objects.filter(specialty__code=self.kwargs['specialty']).select_related("specialty", "company")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["vacancies_title"] = self.kwargs['specialty']
+        context["vacancies_title"] = self.kwargs['specialty'].title
+        return context
 
 
 class DetailCompanyViews(DetailView):
-    template_name = "company.html"
     model = Company
     context_object_name = "company"
+    template_name = "company.html"
 
     def get_queryset(self):
         return self.model.objects.prefetch_related("vacancies", "vacancies__specialty")
@@ -73,5 +72,3 @@ class DetailVacancyView(DetailView):
     model = Vacancy
     context_object_name = "vacancy"
     queryset = model.objects.select_related("specialty", "company")
-
-
