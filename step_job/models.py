@@ -1,7 +1,6 @@
-from django.core.exceptions import ValidationError
 from django.db import models
+from django.contrib.auth.models import User
 
-import data
 from StepikJumanji.settings import BASE_DIR
 
 
@@ -11,6 +10,11 @@ class Company(models.Model):
     logo = models.URLField(default='https://place-hold.it/100x60')
     description = models.CharField(max_length=64)
     employee_count = models.IntegerField()
+    owner = models.OneToOneField(User, on_delete=models.CASCADE, related_name="Companies")
+
+    class Meta:
+        verbose_name = "Компания"
+        verbose_name_plural = "Компании"
 
     def __str__(self):
         return f"Company {self.name}"
@@ -20,6 +24,10 @@ class Specialty(models.Model):
     code = models.CharField(max_length=64, unique=True)
     title = models.CharField(max_length=64)
     picture = models.URLField(default='https://place-hold.it/100x60')
+
+    class Meta:
+        verbose_name = "Специализация"
+        verbose_name_plural = "Специализации"
 
     def __str__(self):
         return f"Specialty {self.title}"
@@ -35,37 +43,26 @@ class Vacancy(models.Model):
     salary_max = models.IntegerField()
     published_at = models.DateTimeField(auto_now_add=True, blank=True)
 
+    class Meta:
+        verbose_name = "Вакансия"
+        verbose_name_plural = "Вакансии"
+
     def __str__(self):
         return f"Vacancy {self.title}"
 
 
-def update_data(moc_data):
-    for spec in moc_data.specialties:
-        specialty = Specialty(
-            code=spec.get("code"),
-            title=spec.get("title"),
-        )
-        specialty.save()
+class Application(models.Model):
+    written_username = models.CharField(max_length=64)
+    written_phone = models.CharField(max_length=12)
+    written_cover_letter = models.TextField(max_length=1028)
+    vacancy = models.OneToOneField(Vacancy, related_name="applications", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name="applications", on_delete=models.CASCADE)
 
-    for data_company in moc_data.companies:
-        company = Company(
-            name=data_company.get("title"),
-            location=data_company.get("location"),
-            logo=f"{BASE_DIR}/{data_company.get('logo')}",
-            description=data_company.get("description"),
-            employee_count=data_company.get("employee_count"),
-        )
-        company.save()
+    class Meta:
+        verbose_name = "Отклик"
+        verbose_name_plural = "Отклики"
 
-    for job in moc_data.jobs:
-        vacancy = Vacancy(
-            title=job.get("title"),
-            specialty=Specialty.objects.get(code=job.get("specialty")),
-            company=Company.objects.get(id=job.get("company")),
-            skills=job.get("skills"),
-            description=job.get("description"),
-            salary_min=job.get("salary_from"),
-            salary_max=job.get("salary_to"),
-            published_at=job.get("published_at"),
-        )
-        vacancy.save()
+    def __str__(self):
+        return f"Application {self.user} to {self.vacancy}"
+
+

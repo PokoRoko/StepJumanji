@@ -1,4 +1,38 @@
-""" Вакансии """
+from step_job.models import Specialty, Company, Vacancy, Application
+from StepikJumanji.settings import BASE_DIR
+
+
+def update_mock_data(mock_data):
+    for spec in mock_data.specialties:
+        specialty = Specialty(
+            code=spec.get("code"),
+            title=spec.get("title"),
+        )
+        specialty.save()
+
+    for data_company in mock_data.companies:
+        company = Company(
+            name=data_company.get("title"),
+            location=data_company.get("location"),
+            logo=f"{BASE_DIR}/{data_company.get('logo')}",
+            description=data_company.get("description"),
+            employee_count=data_company.get("employee_count"),
+        )
+        company.save()
+
+    for job in mock_data.jobs:
+        vacancy = Vacancy(
+            title=job.get("title"),
+            specialty=Specialty.objects.get(code=job.get("specialty")),
+            company=Company.objects.get(id=job.get("company")),
+            skills=job.get("skills"),
+            description=job.get("description"),
+            salary_min=job.get("salary_from"),
+            salary_max=job.get("salary_to"),
+            published_at=job.get("published_at"),
+        )
+        vacancy.save()
+
 
 jobs = [
 
