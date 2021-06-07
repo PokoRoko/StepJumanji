@@ -17,6 +17,27 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="$USER_HOME$/step_job_company.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="$USER_HOME$/step_job_specialty.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="$USER_HOME$/step_job_vacancy.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/mock_data.py">
           <value>
             <Attribute>

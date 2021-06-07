@@ -10,14 +10,14 @@ class Company(models.Model):
     logo = models.ImageField(default='https://place-hold.it/100x60', upload_to=MEDIA_COMPANY_IMAGE_DIR)
     description = models.TextField(max_length=2056)
     employee_count = models.PositiveIntegerField()
-    #owner = models.OneToOneField(User, on_delete=models.CASCADE, related_name="Companies", default="Null")
+    owner = models.OneToOneField(User, on_delete=models.CASCADE, related_name="companies", null=True)
 
     class Meta:
         verbose_name = "Компания"
         verbose_name_plural = "Компании"
 
     def __str__(self):
-        return f"Company {self.name}"
+        return self.name.title()
 
 
 class Specialty(models.Model):
@@ -30,7 +30,7 @@ class Specialty(models.Model):
         verbose_name_plural = "Специализации"
 
     def __str__(self):
-        return f"{self.title}"
+        return self.title.title()
 
 
 class Vacancy(models.Model):
@@ -48,14 +48,14 @@ class Vacancy(models.Model):
         verbose_name_plural = "Вакансии"
 
     def __str__(self):
-        return f"Vacancy {self.title}"
+        return self.title.title()
 
 
 class Application(models.Model):
     written_username = models.CharField(max_length=64)
     written_phone = models.CharField(max_length=12)
     written_cover_letter = models.TextField(max_length=2058)
-    vacancy = models.OneToOneField(Vacancy, related_name="applications", on_delete=models.CASCADE)
+    vacancy = models.ForeignKey(Vacancy, related_name="applications", on_delete=models.CASCADE)
     user = models.ForeignKey(User, related_name="applications", on_delete=models.CASCADE)
 
     class Meta:
