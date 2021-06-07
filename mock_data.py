@@ -1,37 +1,3 @@
-from step_job.models import Specialty, Company, Vacancy, Application
-from StepikJumanji.settings import BASE_DIR
-
-
-def update_mock_data(mock_data):
-    for spec in mock_data.specialties:
-        specialty = Specialty(
-            code=spec.get("code"),
-            title=spec.get("title"),
-        )
-        specialty.save()
-
-    for data_company in mock_data.companies:
-        company = Company(
-            name=data_company.get("title"),
-            location=data_company.get("location"),
-            logo=f"{BASE_DIR}/{data_company.get('logo')}",
-            description=data_company.get("description"),
-            employee_count=data_company.get("employee_count"),
-        )
-        company.save()
-
-    for job in mock_data.jobs:
-        vacancy = Vacancy(
-            title=job.get("title"),
-            specialty=Specialty.objects.get(code=job.get("specialty")),
-            company=Company.objects.get(id=job.get("company")),
-            skills=job.get("skills"),
-            description=job.get("description"),
-            salary_min=job.get("salary_from"),
-            salary_max=job.get("salary_to"),
-            published_at=job.get("published_at"),
-        )
-        vacancy.save()
 
 
 jobs = [
@@ -48,22 +14,19 @@ jobs = [
      "salary_to": "150000", "posted": "2020-03-11", "skills": "Python, Django, PostgreSQL, Git", "description": "<p>Наши основные направления: e-commerce, геосервисы, мессенджеры, распознавание образов, автоматизация, телефония и стартапы. Заказчики - крупные финансовые, IT, продуктовые компании России. Ищем опытного фулл-тайм python-разработчика для работы над проектами нашей компании.</p> <p><b>Что ждем от кандидата:</b></p> <ul> <li>Опыт коммерческой разработки на Python/Django от 2-х лет;</li> <li>Знания SQL (Postgres);</li> <li>Опыт написания клиент-серверных приложений;</li> <li>Умение оценивать объем и сроки работ;</li> <li>Git, системы bug tracking.</li> </ul> <p><b>Чем будете заниматься:</b></p> <ul> <li>Участвовать во всём процессе разработки - от проектирования до запуска.</li> <li>Оптимизировать работу приложения.</li> </ul> <p><b>Плюшки:</b></p> <ul> <li>Оклад от 140 000 руб на руки.;</li> <li>Удаленное сотрудничество с выстроенными процессами;</li> <li>Оформление по ТК РФ.</li> <li>Амбициозные проекты, интересные с профессиональной точки зрения задачи;</li> <li>Команда профессионалов.</li> </ul> <p>В отклике обязательно сопроводительное письмо, почему именно вы подходите на эту вакансию.</p>"}
 ]
 
-""" Компании """
 
 companies = [
 
-    {"id": "1", "title": "workiro", "logo": "logo1.png", "employee_count": "10", "location": "Новосибирск", "description": "Разрабатываем мобильные приложения и сервисы для сферы онлайн-обучения."},
-    {"id": "2", "title": "rebelrage", "logo": "logo2.png", "employee_count": "24", "location": "Москва", "description": "Мобильные сервисы, программное обеспечение, веб-сайты, мобильные приложения."},
-    {"id": "3", "title": "staffingsmarter", "logo": "logo3.png", "employee_count": "123", "location": "Москва", "description": "Сервис онлайн-наблюдения за процессом сдачи экзамена с искусственным интеллектом"},
-    {"id": "4", "title": "evilthreat h", "logo": "logo4.png", "employee_count": "36", "location": "Москва", "description": "Лидирующее в России и Восточной Европе ПО для проведения вебинаров и видео-конференций."},
-    {"id": "5", "title": "hirey ", "logo": "logo5.png", "employee_count": "21", "location": "Воронеж", "description": "Телекоммуникационные и платежные сервисы, которые помогают развиваться бизнесам во всем мире."},
-    {"id": "6", "title": "swiftattack", "logo": "logo6.png", "employee_count": "79", "location": "Москва", "description": "Разработка сложных веб-сервисов и мобильных приложений"},
-    {"id": "7", "title": "troller", "logo": "logo7.png", "employee_count": "230", "location": "Санкт-Петербург", "description": "Мобильное приложение, позволяющее примерить обувь и выбрать идеальную пару всего в 3 клика"},
-    {"id": "8", "title": "primalassault", "logo": "logo8.png","employee_count": "13", "location": "Москва", "description": "Реализуем проекты любой сложности в digital-сфере" }
-
+    {"id": "1", "title": "workiro", "logo": "logo1.png", "employee_count": "10", "location": "Новосибирск", "description": "Разрабатываем мобильные приложения и сервисы для сферы онлайн-обучения.", 'owner': '8'},
+    {"id": "2", "title": "rebelrage", "logo": "logo2.png", "employee_count": "24", "location": "Москва", "description": "Мобильные сервисы, программное обеспечение, веб-сайты, мобильные приложения.", 'owner': '7'},
+    {"id": "3", "title": "staffingsmarter", "logo": "logo3.png", "employee_count": "123", "location": "Москва", "description": "Сервис онлайн-наблюдения за процессом сдачи экзамена с искусственным интеллектом", 'owner': '6'},
+    {"id": "4", "title": "evilthreat h", "logo": "logo4.png", "employee_count": "36", "location": "Москва", "description": "Лидирующее в России и Восточной Европе ПО для проведения вебинаров и видео-конференций.", 'owner': '5'},
+    {"id": "5", "title": "hirey ", "logo": "logo5.png", "employee_count": "21", "location": "Воронеж", "description": "Телекоммуникационные и платежные сервисы, которые помогают развиваться бизнесам во всем мире.", 'owner': '4'},
+    {"id": "6", "title": "swiftattack", "logo": "logo6.png", "employee_count": "79", "location": "Москва", "description": "Разработка сложных веб-сервисов и мобильных приложений", 'owner': '3'},
+    {"id": "7", "title": "troller", "logo": "logo7.png", "employee_count": "230", "location": "Санкт-Петербург", "description": "Мобильное приложение, позволяющее примерить обувь и выбрать идеальную пару всего в 3 клика", 'owner': '2'},
+    {"id": "8", "title": "primalassault", "logo": "logo8.png","employee_count": "13", "location": "Москва", "description": "Реализуем проекты любой сложности в digital-сфере", 'owner': '1'}
 ]
 
-""" Категории """
 
 specialties = [
 

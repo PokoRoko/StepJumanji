@@ -24,6 +24,20 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/step_job/admin.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/step_job/migrations/__init__.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/step_job/models.py">
           <value>
             <Attribute>
