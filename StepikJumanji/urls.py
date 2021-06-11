@@ -7,6 +7,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("step_job.urls")),
+    path('', include("accounts.urls"))
 ]
 
 # Настройка для подгрузки статики в режиме DEBUG

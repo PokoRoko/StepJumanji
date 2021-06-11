@@ -1,7 +1,9 @@
 from django.db.models import Count
 from django.http import (HttpResponseBadRequest, HttpResponseForbidden,
                          HttpResponseNotFound, HttpResponseServerError)
-from django.views.generic import DetailView, ListView, TemplateView
+from django.views.generic import DetailView, ListView, TemplateView, CreateView, UpdateView, FormView, View
+from django.contrib.auth.decorators import login_required
+
 
 from .models import Company, Specialty, Vacancy
 
@@ -20,6 +22,7 @@ def custom_handler404(request, exception):
 
 def custom_handler500(request):
     return HttpResponseServerError('Ошибка сервера!')
+
 
 
 class IndexView(TemplateView):
@@ -42,7 +45,6 @@ class ListVacanciesView(ListView):
         context = super().get_context_data(**kwargs)
         context["vacancies_title"] = "Все вакансии"
         return context
-
 
 class ListSpecializationView(ListView):
     model = Vacancy
@@ -72,3 +74,41 @@ class DetailVacancyView(DetailView):
     model = Vacancy
     context_object_name = "vacancy"
     queryset = model.objects.select_related("specialty", "company")
+
+
+# New week
+class SentView(TemplateView):
+    template_name = "sent.html"
+
+
+class DetailViewMyCompany(DetailView):
+    template_name = "company-edit.html"
+    model = Company
+    context_object_name = "company"
+    queryset = model.objects.select_related("owner")
+
+
+class ListMyVacanciesView(ListView):
+    model = Vacancy
+    context_object_name = "vacancies"
+    template_name = "vacancy-list.html"
+    queryset = model.objects.select_related("specialty", "company")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["vacancies_title"] = "Мои вакансии"
+        return context
+
+
+class CreateCompanyView(CreateView):
+    model = Company
+    context_object_name = "company"
+    template_name = "company-edit.html"
+    queryset = model.objects.select_related("specialty", "company")
+
+
+class CreateVacancyView(CreateView):
+    model = Vacancy
+    context_object_name = "vacancies"
+    template_name = "vacancy-edit.html"
+    # queryset = model.objects.select_related("vacancies", "vacancies__specialty")
