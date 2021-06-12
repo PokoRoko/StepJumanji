@@ -27,7 +27,7 @@ def custom_handler500(request):
     return HttpResponseServerError('Ошибка сервера!')
 
 
-class IndexView(LoginRequiredMixin,TemplateView):
+class IndexView(TemplateView):
     template_name = "index.html"
 
     def get_context_data(self, **kwargs):
@@ -107,7 +107,7 @@ class SentView(LoginRequiredMixin, TemplateView):
     template_name = "sent.html"
 
 
-class DetailViewMyCompany(LoginRequiredMixin, DetailView):
+class MyCompanyView(LoginRequiredMixin, DetailView):
     template_name = "company-edit.html"
     model = Company
     context_object_name = "company"

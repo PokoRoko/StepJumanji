@@ -5,14 +5,6 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
 
-class PostcardForm(forms.Form):
-    address = forms.CharField(label='Destination Address')
-    author = forms.CharField(min_length=3)
-    compliment = forms.CharField(max_length=1024)
-    date_of_delivery = forms.DateField(input_formats=['%Y/%m/%d'])
-    email = forms.EmailField()
-
-
 class ApplicationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -43,4 +35,40 @@ class ApplicationForm(forms.ModelForm):
         }
         help_texts = {
             "written_username": _('Укажите как к вам обращаться'),
+        }
+
+
+class CompanyForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.add_input(Submit('submit', 'Submit'))
+
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-2'
+        self.helper.field_class = 'col-lg-8'
+
+    class Meta:
+        model = Application
+        fields = [
+            "name",
+            "location",
+            "logo",
+            "description",
+            "employee_count",
+        ]
+        exclude = [
+            "owner",
+        ]
+        labels = {
+            "name": _("Название компании"),
+            "location": _("Местаросположение"),
+            "logo": _("Логотип"),
+            "description": _("Описание"),
+            "employee_count": _("Количество сотрудников"),
+        }
+        help_texts = {
+            "location": _('Укажите город или страну'),
         }
