@@ -131,3 +131,6 @@ MEDIA_SPECIALITY_IMAGE_DIR = 'speciality_images'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Crispy
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
