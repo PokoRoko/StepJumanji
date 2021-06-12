@@ -1,5 +1,5 @@
 from django.utils.translation import gettext_lazy as _
-from .models import Application
+from .models import Application, Company
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
@@ -51,7 +51,7 @@ class CompanyForm(forms.ModelForm):
         self.helper.field_class = 'col-lg-8'
 
     class Meta:
-        model = Application
+        model = Company
         fields = [
             "name",
             "location",

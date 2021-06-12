@@ -7,7 +7,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import DetailView, ListView, TemplateView, CreateView, UpdateView, FormView, View
 from django.contrib.auth.decorators import login_required
 
-from .forms import ApplicationForm, PostcardForm
+from .forms import ApplicationForm
 from .models import Company, Specialty, Vacancy, Application,Resume
 
 
