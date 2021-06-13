@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base/base.html" %}
 {% load crispy_forms_filters %}
 {% load filters %}
 {% load crispy_forms_tags %}
@@ -12,7 +12,7 @@
       </div>
       <div class="col-12 col-lg-8">
         <section class="pl-3">
-          <a href="#"><img src="{{ vacancy.company.logo }}" width="130" height="80" alt=""></a>
+          <a href="{% url 'company' vacancy.company.id %}"><img src="{{ vacancy.company.logo }}" width="130" height="80" alt=""></a>
           <div class="d-flex align-items-baseline align-content-baseline">
             <h1 class="h2 mt-4 font-weight-bold" >{{ vacancy.title }}</h1>
             <p class="m-0 pl-3">{{ vacancy.salary_min|salary_num}} – {{ vacancy.salary_max|salary_num}} Р</p>
@@ -27,12 +27,15 @@
           </div>
 
 
-
           <form class="card mt-4 mb-3" enctype="multipart/form-data" method="post"> {% csrf_token %}
             <div class="card-body mx-3">
               <p class="h5 mt-3 font-weight-normal">Отозваться на вакансию</p>
             {{ form|crispy }}
-              <input type="submit" class="btn btn-primary mt-4 mb-2" value="Записаться на пробный урок">
+                {% if user.is_authenticated %}
+                    <input type="submit" class="btn btn-primary mt-4 mb-2" value="Оставить отклик">
+                {% else %}
+                    <input type="submit" class="btn btn-primary mt-4 mb-2 disabled" value="Авторизуйтесь чтобы оставить отклик">
+                {% endif %}
             </div>
           </form>
 

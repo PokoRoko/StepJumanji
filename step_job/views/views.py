@@ -13,8 +13,8 @@ from django.views.generic import DetailView, ListView, TemplateView, CreateView,
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext_lazy as _
 
-from .forms import ApplicationForm, CompanyForm, VacancyForm
-from .models import Company, Specialty, Vacancy, Application, Resume
+from step_job.forms import ApplicationForm, CompanyForm, VacancyForm
+from step_job.models import Company, Specialty, Vacancy, Application, Resume
 
 
 def custom_handler400(request, exception):
@@ -34,7 +34,7 @@ def custom_handler500(request):
 
 
 class IndexView(TemplateView):
-    template_name = "index.html"
+    template_name = "base/index.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -43,10 +43,10 @@ class IndexView(TemplateView):
         return context
 
 
-class ListVacanciesView(LoginRequiredMixin,ListView):
+class ListVacanciesView(ListView):
     model = Vacancy
     context_object_name = "vacancies"
-    template_name = "vacancies.html"
+    template_name = "vacancy/vacancies.html"
     queryset = model.objects.select_related("specialty", "company")
 
     def get_context_data(self, **kwargs):
@@ -55,13 +55,14 @@ class ListVacanciesView(LoginRequiredMixin,ListView):
         return context
 
 
-class ListSpecializationView(LoginRequiredMixin,ListView):
+class ListSpecializationView(ListView):
     model = Vacancy
     context_object_name = "vacancies"
-    template_name = "vacancies.html"
+    template_name = "vacancy/vacancies.html"
 
     def get_queryset(self):
-        return self.model.objects.filter(specialty__code=self.kwargs['specialty']).select_related("specialty", "company")
+        return self.model.objects.filter(specialty__code=self.kwargs['specialty']).select_related("specialty",
+                                                                                                  "company")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -69,28 +70,32 @@ class ListSpecializationView(LoginRequiredMixin,ListView):
         return context
 
 
-class DetailCompanyViews(LoginRequiredMixin, DetailView):
+class DetailCompanyViews(DetailView):
     model = Company
     context_object_name = "company"
-    template_name = "company.html"
+    template_name = "company/company.html"
 
     def get_queryset(self):
         return self.model.objects.prefetch_related("vacancies", "vacancies__specialty")
 
 
-class VacancyView(LoginRequiredMixin, View):
+class SendView(LoginRequiredMixin, TemplateView):
+    template_name = "base/sent.html"
+
+
+class VacancyView(View):
 
     def get(self, request, pk):
         vacancy = get_object_or_404(Vacancy, pk=pk)
         form = ApplicationForm()
         return render(
             request,
-            template_name="vacancy.html",
+            template_name="vacancy/vacancy.html",
             context={
                 "vacancy": vacancy,
                 "form": form})
 
-    def post(self, request, pk):
+    def post(self, request, pk):  # Отсечку авторизации сделал через шаблон
         vacancy = get_object_or_404(Vacancy, pk=pk)
         form = ApplicationForm(request.POST)
         if form.is_valid():
@@ -98,30 +103,25 @@ class VacancyView(LoginRequiredMixin, View):
             application.vacancy = vacancy
             application.user = request.user
             application.save()
-            return redirect('sent')  # Не работает нужно добавить reverse
+            return redirect('send/')
 
         return render(
             request,
-            template_name="vacancy.html",
+            template_name="vacancy/vacancy.html",
             context={
                 "vacancy": vacancy,
                 "form": form})
 
 
-# New week
-class SentView(LoginRequiredMixin, TemplateView):
-    template_name = "sent.html"
-
-
 class MyCompanyView(LoginRequiredMixin, View):
 
     def get(self, request):
-        my_company =  get_object_or_404(Company,owner__username=request.user)
+        my_company = get_object_or_404(Company, owner__username=request.user)
         if my_company:
             form = CompanyForm(instance=my_company)
             return render(
                 request,
-                template_name="company-edit.html",
+                template_name="company/company-edit.html",
                 context={
                     "company": my_company,
                     "form": form})
@@ -129,10 +129,10 @@ class MyCompanyView(LoginRequiredMixin, View):
         else:
             return render(
                 request,
-                template_name="company-create.html",
+                template_name="company/company-create.html",
                 context={
                     "company": my_company,
-                    })
+                })
 
     def post(self, request):
         info_update = "Информация о компании обновлена"
@@ -145,7 +145,7 @@ class MyCompanyView(LoginRequiredMixin, View):
 
         return render(
             request,
-            template_name="company-edit.html",
+            template_name="company/company-edit.html",
             context={
                 'info_update': info_update,
                 "company": my_company,
@@ -155,7 +155,7 @@ class MyCompanyView(LoginRequiredMixin, View):
 class CreateCompanyView(LoginRequiredMixin, CreateView):
     model = Company
     context_object_name = "company"
-    template_name = "company-edit.html"
+    template_name = "company/company-edit.html"
     queryset = model.objects.select_related("specialty", "company")
     fields = [
         "name",
@@ -169,11 +169,12 @@ class CreateCompanyView(LoginRequiredMixin, CreateView):
 class ListMyVacanciesView(LoginRequiredMixin, ListView):
     model = Vacancy
     context_object_name = "vacancies"
-    template_name = "vacancy-list.html"
+    template_name = "vacancy/vacancy-list.html"
+
     # queryset = model.objects.select_related("specialty", "company")
 
     def get_queryset(self):
-        return self.model.objects.filter(company__owner=self.request.user,).select_related("company")
+        return self.model.objects.filter(company__owner=self.request.user, ).select_related("company")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -183,7 +184,7 @@ class ListMyVacanciesView(LoginRequiredMixin, ListView):
 
 class CreateVacancyView(LoginRequiredMixin, CreateView):
     context_object_name = "vacancy"
-    template_name = "vacancy-edit.html"
+    template_name = "vacancy/vacancy-edit.html"
     form_class = VacancyForm
     success_message = 'Вакансия создана!'
 
@@ -197,18 +198,16 @@ class CreateVacancyView(LoginRequiredMixin, CreateView):
         return redirect('/')
 
 
-class UpdateVacancyView(LoginRequiredMixin,SuccessMessageMixin, UpdateView):
+class UpdateVacancyView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Vacancy
     context_object_name = "vacancy"
-    template_name = "vacancy-edit.html"
+    template_name = "vacancy/vacancy-edit.html"
     form_class = VacancyForm
-    success_url = '/mycompany/vacancies/8/'
-    success_message = 'Данные вакансии обновлены!'
-    # def post(self, request, *args, **kwargs):
-    #     form = VacancyForm(request.POST)
-    #     if form.is_valid():
-    #         vacancy = form.save(commit=False)
-    #         vacancy.company = Company.objects.get(owner__username=self.request.user).select_related("application")
-    #         vacancy.published_at = datetime.datetime.now()
-    #         vacancy.save()
-    #     return redirect('/')
+    success_url = "/mycompany/vacancies/8/"
+    success_message = "Данные вакансии обновлены!"
+    pk_url_kwarg = "pk"
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context["applications"] = Application.objects.filter(vacancy="vacancy.id")
+    #     return context

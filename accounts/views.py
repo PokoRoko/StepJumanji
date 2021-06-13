@@ -7,7 +7,7 @@ from accounts.forms import MyUserCreationForm
 
 class RegisterView(CreateView):
     form_class = MyUserCreationForm
-    success_url = 'login'
+    success_url = '/login'
     template_name = '../templates/registration /register.html'
 
 

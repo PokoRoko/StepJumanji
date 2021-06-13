@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-from mock_data import *
 from StepikJumanji.settings import MEDIA_COMPANY_IMAGE_DIR, MEDIA_SPECIALITY_IMAGE_DIR
 
 
