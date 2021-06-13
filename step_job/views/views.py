@@ -1,20 +1,16 @@
 import datetime
 
-from django.contrib.messages.views import SuccessMessageMixin
-from loguru import logger
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
+from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Count
 from django.http import (HttpResponseBadRequest, HttpResponseForbidden,
                          HttpResponseNotFound, HttpResponseServerError)
-from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse, reverse_lazy
-from django.views.generic import DetailView, ListView, TemplateView, CreateView, UpdateView, FormView, View
-from django.contrib.auth.decorators import login_required
-from django.utils.translation import gettext_lazy as _
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.generic import (CreateView, DetailView, ListView,
+                                  TemplateView, UpdateView, View)
 
 from step_job.forms import ApplicationForm, CompanyForm, VacancyForm
-from step_job.models import Company, Specialty, Vacancy, Application, Resume
+from step_job.models import Application, Company, Specialty, Vacancy
 
 
 def custom_handler400(request, exception):
@@ -171,10 +167,8 @@ class ListMyVacanciesView(LoginRequiredMixin, ListView):
     context_object_name = "vacancies"
     template_name = "vacancy/vacancy-list.html"
 
-    # queryset = model.objects.select_related("specialty", "company")
-
     def get_queryset(self):
-        return self.model.objects.filter(company__owner=self.request.user, ).select_related("company")
+        return self.model.objects.filter(company__owner=self.request.user).select_related("company")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -203,11 +197,11 @@ class UpdateVacancyView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     context_object_name = "vacancy"
     template_name = "vacancy/vacancy-edit.html"
     form_class = VacancyForm
-    success_url = "/mycompany/vacancies/8/"
+    success_url = "/mycompany/vacancies/8/"  # Как получить сода ПК
     success_message = "Данные вакансии обновлены!"
     pk_url_kwarg = "pk"
 
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)
-    #     context["applications"] = Application.objects.filter(vacancy="vacancy.id")
+    #     context["applications"] = Application.objects.filter(vacancy=ПК)
     #     return context

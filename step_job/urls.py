@@ -1,9 +1,11 @@
 from django.urls import path
-from .views.views import (DetailCompanyViews, VacancyView, IndexView,
+
+from .views.views import (CreateCompanyView, CreateVacancyView,
+                          DetailCompanyViews, IndexView, ListMyVacanciesView,
                           ListSpecializationView, ListVacanciesView,
-                          custom_handler400, custom_handler403, custom_handler404,
-                          custom_handler500, SendView, MyCompanyView, ListMyVacanciesView, CreateVacancyView,
-                          CreateCompanyView, UpdateVacancyView)
+                          MyCompanyView, SendView, UpdateVacancyView,
+                          VacancyView, custom_handler400, custom_handler403,
+                          custom_handler404, custom_handler500)
 
 handler400 = custom_handler400
 handler403 = custom_handler403

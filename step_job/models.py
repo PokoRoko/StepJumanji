@@ -1,6 +1,8 @@
-from django.db import models
 from django.contrib.auth.models import User
-from StepikJumanji.settings import MEDIA_COMPANY_IMAGE_DIR, MEDIA_SPECIALITY_IMAGE_DIR
+from django.db import models
+
+from StepikJumanji.settings import (MEDIA_COMPANY_IMAGE_DIR,
+                                    MEDIA_SPECIALITY_IMAGE_DIR)
 
 
 class Company(models.Model):
@@ -112,4 +114,3 @@ class Resume(models.Model):
 
     def __str__(self):
         return f"Resume {self.user}"
-

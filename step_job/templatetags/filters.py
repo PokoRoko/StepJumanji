@@ -5,9 +5,9 @@ register = template.Library()
 
 @register.filter
 def salary_num(value_int):
-    value = str(value_int)
-    res = [value[0:len(value) % 3]]
-    slice_val = value[len(value) % 3:len(value)]
+    my_val = str(value_int)
+    res = [my_val[0:len(my_val) % 3]]
+    slice_val = my_val[len(my_val) % 3:len(my_val)]
     for gnum in range(0, len(slice_val), 3):
         res.append(slice_val[gnum:gnum + 3])
     return " ".join(res)

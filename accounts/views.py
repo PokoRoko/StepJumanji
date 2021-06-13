@@ -1,6 +1,5 @@
-from django.contrib.auth.forms import UserCreationForm
-from django.views.generic import CreateView
 from django.contrib.auth.views import LoginView
+from django.views.generic import CreateView
 
 from accounts.forms import MyUserCreationForm
 

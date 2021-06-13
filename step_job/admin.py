@@ -1,5 +1,6 @@
 from django.contrib import admin
-from step_job.models import Company,Specialty,Vacancy,Application,Resume
+
+from step_job.models import Application, Company, Resume, Specialty, Vacancy
 
 
 class CompanyAdmin(admin.ModelAdmin):
