@@ -4,7 +4,7 @@ from .views import (DetailCompanyViews, VacancyView, IndexView,
                     ListSpecializationView, ListVacanciesView,
                     custom_handler400, custom_handler403, custom_handler404,
                     custom_handler500, SentView, MyCompanyView, ListMyVacanciesView, CreateVacancyView,
-                    CreateCompanyView)
+                    CreateCompanyView, UpdateVacancyView)
 
 handler400 = custom_handler400
 handler403 = custom_handler403
@@ -24,5 +24,5 @@ urlpatterns = [
     path('mycompany/create/', CreateCompanyView.as_view(), name="my_company_create"),
     path('mycompany/vacancies/', ListMyVacanciesView.as_view(), name="list_my_vacancies"),
     path('mycompany/vacancies/create/', CreateVacancyView.as_view(), name="my_vacancy_create"),
-    path('mycompany/vacancies/<int:pk>/', VacancyView.as_view(), name='my_vacancy'),
+    path('mycompany/vacancies/<int:pk>/', UpdateVacancyView.as_view(), name='my_vacancy_edit'),
 ]

@@ -1,15 +1,19 @@
+import datetime
+
+from django.contrib.messages.views import SuccessMessageMixin
+from loguru import logger
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import Count
 from django.http import (HttpResponseBadRequest, HttpResponseForbidden,
                          HttpResponseNotFound, HttpResponseServerError)
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView, ListView, TemplateView, CreateView, UpdateView, FormView, View
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext_lazy as _
 
-from .forms import ApplicationForm, CompanyForm
+from .forms import ApplicationForm, CompanyForm, VacancyForm
 from .models import Company, Specialty, Vacancy, Application, Resume
 
 
@@ -112,7 +116,7 @@ class SentView(LoginRequiredMixin, TemplateView):
 class MyCompanyView(LoginRequiredMixin, View):
 
     def get(self, request):
-        my_company = Company.objects.filter(owner__username=request.user)[0]
+        my_company =  get_object_or_404(Company,owner__username=request.user)
         if my_company:
             form = CompanyForm(instance=my_company)
             return render(
@@ -177,11 +181,34 @@ class ListMyVacanciesView(LoginRequiredMixin, ListView):
         return context
 
 
-class CreateVacancyView(LoginRequiredMixin, View):
-    def get(self, request, *args, **kwargs):
-        model = Vacancy
-        context_object_name = "vacancy"
-        template_name = "vacancy-edit.html"
+class CreateVacancyView(LoginRequiredMixin, CreateView):
+    context_object_name = "vacancy"
+    template_name = "vacancy-edit.html"
+    form_class = VacancyForm
+    success_message = 'Вакансия создана!'
+
+    def post(self, request, *args, **kwargs):
+        form = VacancyForm(request.POST)
+        if form.is_valid():
+            vacancy = form.save(commit=False)
+            vacancy.company = Company.objects.get(owner__username=self.request.user)
+            vacancy.published_at = datetime.datetime.now()
+            vacancy.save()
+        return redirect('/')
 
 
-    # queryset = model.objects.select_related("vacancies", "vacancies__specialty")
+class UpdateVacancyView(LoginRequiredMixin,SuccessMessageMixin, UpdateView):
+    model = Vacancy
+    context_object_name = "vacancy"
+    template_name = "vacancy-edit.html"
+    form_class = VacancyForm
+    success_url = '/mycompany/vacancies/8/'
+    success_message = 'Данные вакансии обновлены!'
+    # def post(self, request, *args, **kwargs):
+    #     form = VacancyForm(request.POST)
+    #     if form.is_valid():
+    #         vacancy = form.save(commit=False)
+    #         vacancy.company = Company.objects.get(owner__username=self.request.user).select_related("application")
+    #         vacancy.published_at = datetime.datetime.now()
+    #         vacancy.save()
+    #     return redirect('/')
