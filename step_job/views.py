@@ -4,11 +4,13 @@ from django.db.models import Count
 from django.http import (HttpResponseBadRequest, HttpResponseForbidden,
                          HttpResponseNotFound, HttpResponseServerError)
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 from django.views.generic import DetailView, ListView, TemplateView, CreateView, UpdateView, FormView, View
 from django.contrib.auth.decorators import login_required
+from django.utils.translation import gettext_lazy as _
 
-from .forms import ApplicationForm
-from .models import Company, Specialty, Vacancy, Application,Resume
+from .forms import ApplicationForm, CompanyForm
+from .models import Company, Specialty, Vacancy, Application, Resume
 
 
 def custom_handler400(request, exception):
@@ -107,23 +109,43 @@ class SentView(LoginRequiredMixin, TemplateView):
     template_name = "sent.html"
 
 
-class MyCompanyView(LoginRequiredMixin, DetailView):
-    template_name = "company-edit.html"
-    model = Company
-    context_object_name = "company"
-    queryset = model.objects.select_related("owner")
+class MyCompanyView(LoginRequiredMixin, View):
 
+    def get(self, request):
+        my_company = Company.objects.filter(owner__username=request.user)[0]
+        if my_company:
+            form = CompanyForm(instance=my_company)
+            return render(
+                request,
+                template_name="company-edit.html",
+                context={
+                    "company": my_company,
+                    "form": form})
 
-class ListMyVacanciesView(LoginRequiredMixin, ListView):
-    model = Vacancy
-    context_object_name = "vacancies"
-    template_name = "vacancy-list.html"
-    queryset = model.objects.select_related("specialty", "company")
+        else:
+            return render(
+                request,
+                template_name="company-create.html",
+                context={
+                    "company": my_company,
+                    })
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["vacancies_title"] = "Мои вакансии"
-        return context
+    def post(self, request):
+        info_update = "Информация о компании обновлена"
+        my_company = Company.objects.get(owner__username=request.user)
+        form = CompanyForm(request.POST, instance=my_company)
+        if form.is_valid():
+            my_company = form.save(commit=False)
+            my_company.owner = self.request.user
+            my_company.save()
+
+        return render(
+            request,
+            template_name="company-edit.html",
+            context={
+                'info_update': info_update,
+                "company": my_company,
+                "form": form})
 
 
 class CreateCompanyView(LoginRequiredMixin, CreateView):
@@ -131,10 +153,35 @@ class CreateCompanyView(LoginRequiredMixin, CreateView):
     context_object_name = "company"
     template_name = "company-edit.html"
     queryset = model.objects.select_related("specialty", "company")
+    fields = [
+        "name",
+        "location",
+        "logo",
+        "description",
+        "employee_count",
+    ]
 
 
-class CreateVacancyView(LoginRequiredMixin, CreateView):
+class ListMyVacanciesView(LoginRequiredMixin, ListView):
     model = Vacancy
     context_object_name = "vacancies"
-    template_name = "vacancy-edit.html"
+    template_name = "vacancy-list.html"
+    # queryset = model.objects.select_related("specialty", "company")
+
+    def get_queryset(self):
+        return self.model.objects.filter(company__owner=self.request.user,).select_related("company")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["vacancies_title"] = "Мои вакансии"
+        return context
+
+
+class CreateVacancyView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        model = Vacancy
+        context_object_name = "vacancy"
+        template_name = "vacancy-edit.html"
+
+
     # queryset = model.objects.select_related("vacancies", "vacancies__specialty")

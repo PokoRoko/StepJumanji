@@ -23,6 +23,6 @@ urlpatterns = [
     path('mycompany/letsstart/', MyCompanyView.as_view(), name="company_lets_start"),
     path('mycompany/create/', CreateCompanyView.as_view(), name="my_company_create"),
     path('mycompany/vacancies/', ListMyVacanciesView.as_view(), name="list_my_vacancies"),
-    path('mycompany/vacancies/create/', CreateVacancyView.as_view(), name="my_company_create"),
+    path('mycompany/vacancies/create/', CreateVacancyView.as_view(), name="my_vacancy_create"),
     path('mycompany/vacancies/<int:pk>/', VacancyView.as_view(), name='my_vacancy'),
 ]
