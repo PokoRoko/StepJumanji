@@ -129,6 +129,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/venv/lib/python3.9/site-packages/django/views/generic/edit.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
       </map>
     </option>
   </component>

@@ -1,11 +1,13 @@
 import datetime
 
+import loguru
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Count
 from django.http import (HttpResponseBadRequest, HttpResponseForbidden,
                          HttpResponseNotFound, HttpResponseServerError)
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse, reverse_lazy
 from django.views.generic import (CreateView, DetailView, ListView,
                                   TemplateView, UpdateView, View)
 
@@ -197,11 +199,13 @@ class UpdateVacancyView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     context_object_name = "vacancy"
     template_name = "vacancy/vacancy-edit.html"
     form_class = VacancyForm
-    success_url = "/mycompany/vacancies/8/"  # Как получить сода ПК
-    success_message = "Данные вакансии обновлены!"
-    pk_url_kwarg = "pk"
+    success_message = "Данные вакансии обновлены"
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context["applications"] = Application.objects.filter(vacancy=ПК)
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["applications"] = Application.objects.filter(vacancy=self.kwargs['pk'])
+        return context
+
+    def get_success_url(self, **kwargs):
+        url = reverse('my_vacancy_edit', args=[self.kwargs['pk']])
+        return url
