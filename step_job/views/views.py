@@ -1,13 +1,13 @@
 import datetime
 
-import loguru
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Count
 from django.http import (HttpResponseBadRequest, HttpResponseForbidden,
                          HttpResponseNotFound, HttpResponseServerError)
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 from django.views.generic import (CreateView, DetailView, ListView,
                                   TemplateView, UpdateView, View)
 
