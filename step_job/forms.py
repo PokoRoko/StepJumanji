@@ -29,11 +29,7 @@ class ApplicationForm(forms.ModelForm):
             "vacancy",
             "user",
         ]
-        labels = {
-            "written_username": _('Ваше имя'),
-            "written_phone": _('Телефон'),
-            "written_cover_letter": _('Сопроводительное письмо'),
-        }
+
         help_texts = {
             "written_username": _('Укажите как к вам обращаться'),
         }
@@ -63,13 +59,6 @@ class CompanyForm(forms.ModelForm):
         exclude = [
             "owner",
         ]
-        labels = {
-            "name": _("Название компании"),
-            "location": _("Местаросположение"),
-            "logo": _("Логотип"),
-            "description": _("Описание"),
-            "employee_count": _("Количество сотрудников"),
-        }
         help_texts = {
             "location": _('Укажите город или страну'),
         }
@@ -96,17 +85,8 @@ class VacancyForm(forms.ModelForm):
             "description",
             "salary_min",
             "salary_max",
-
         ]
         exclude = [
             "company",
             "published_at",
         ]
-        labels = {
-            "title": _("Название вакансии"),
-            "specialty": _("Специализация"),
-            "skills": _("Навыки"),
-            "description": _("Описание"),
-            "salary_min": _("Минимальный оклад"),
-            "salary_max": _("Максимальный оклад"),
-        }

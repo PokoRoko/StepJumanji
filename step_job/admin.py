@@ -15,7 +15,16 @@ class SpecialtyAdmin(admin.ModelAdmin):
 
 @admin.register(Vacancy)
 class VacancyAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("title", "salary_min", "salary_max", "specialty", "published_at")
+    fields = (
+        "company",
+        "title",
+        "specialty",
+        "skills",
+        "description",
+        "salary_min",
+        "salary_max",
+    )
 
 
 @admin.register(Application)
