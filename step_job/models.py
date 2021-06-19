@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+
 from StepikJumanji.settings import (MEDIA_COMPANY_IMAGE_DIR,
                                     MEDIA_SPECIALITY_IMAGE_DIR)
 
@@ -25,7 +27,8 @@ class Company(models.Model):
 class Specialty(models.Model):
     code = models.CharField(_("Код"), max_length=64, unique=True)
     title = models.CharField(_("Описание"), max_length=64)
-    picture = models.ImageField(_("Картинка"), default='https://place-hold.it/100x60', upload_to=MEDIA_SPECIALITY_IMAGE_DIR)
+    picture = models.ImageField(_("Картинка"), default='https://place-hold.it/100x60',
+                                upload_to=MEDIA_SPECIALITY_IMAGE_DIR)
 
     class Meta:
         verbose_name = _("Специализация")
@@ -43,8 +46,8 @@ class Vacancy(models.Model):
                                 related_name="vacancies", verbose_name=_("Компания"))
     skills = models.CharField(_("Навыки"), max_length=512)
     description = models.TextField(_("Описание"), max_length=2056)
-    salary_min = models.PositiveIntegerField(_("Зарплато от"),)
-    salary_max = models.PositiveIntegerField(_("Зарплата до"),)
+    salary_min = models.PositiveIntegerField(_("Зарплато от"))
+    salary_max = models.PositiveIntegerField(_("Зарплата до"))
     published_at = models.DateTimeField(_("Дата публикации"), auto_now_add=True, blank=True)
 
     class Meta:
@@ -92,11 +95,11 @@ class Resume(models.Model):
         consideration = _('Рассматриваю предложения')
         in_search = _('Ищу работу')
 
-    user = models.OneToOneField(User, related_name="resumes", on_delete=models.CASCADE, verbose_name=_("Пользователь"),)
+    user = models.OneToOneField(User, related_name="resumes", on_delete=models.CASCADE, verbose_name=_("Пользователь"))
     name = models.CharField(_("Имя"), max_length=64)
     surname = models.CharField(_("Фамилия"), max_length=64)
     status = models.CharField(_("Статус"), choices=WorkStatus.choices, max_length=64)
-    salary = models.PositiveIntegerField(_("Ожидаемая зарплата"), )
+    salary = models.PositiveIntegerField(_("Ожидаемая зарплата"))
     specialty = models.ForeignKey(Specialty, related_name="resumes",
                                   on_delete=models.CASCADE, verbose_name=_("Специальность"))
     grade = models.CharField(_("Уровень квалификации"), choices=Grade.choices, max_length=64)
