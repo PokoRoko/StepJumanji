@@ -3,6 +3,7 @@
 {% load filters %}
 {% load crispy_forms_tags %}
 {% block container %}
+
   <main class="container mt-3 pb-5">
     <div class="row mt-5">
       <div class="col-12 col-lg-2">
@@ -29,11 +30,11 @@
 
           <form class="card mt-4 mb-3" enctype="multipart/form-data" method="post"> {% csrf_token %}
             <div class="card-body mx-3">
-              <p class="h5 mt-3 font-weight-normal">Отозваться на вакансию</p>
-            {{ form|crispy }}
+              <p class="h5 mt-3 font-weight-normal">Откликнуться на вакансию</p>
                 {% if user.is_authenticated %}
-                    <input type="submit" class="btn btn-primary mt-4 mb-2" value="Оставить отклик">
+                    {% crispy form %}
                 {% else %}
+                    {{ form|crispy }}
                     <input type="submit" class="btn btn-primary mt-4 mb-2 disabled" value="Авторизуйтесь чтобы оставить отклик">
                 {% endif %}
             </div>

@@ -101,6 +101,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/step_job/views/views.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/templates/company-edit.html">
           <value>
             <Attribute>

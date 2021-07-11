@@ -17,3 +17,8 @@ def salary_num(value_int):
 def dot_skill(skills):
     skill_list = skills.split(', ')
     return ' • '.join(skill_list)
+
+
+@register.filter
+def addclass(field, css):
+    return field.as_widget(attrs={'class': css})

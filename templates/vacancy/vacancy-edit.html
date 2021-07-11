@@ -26,15 +26,13 @@
                   {% csrf_token %}
                     {% if messages %}
                         <div class="alert alert-success">
-                            {% for m in messages %}
-                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ m }}</li>
+                            {% for message in messages %}
+                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
                             {% endfor %}
                         </div>
                     {% endif %}
-                    {{ form|crispy }}
-                    <input type="submit" class="btn btn-info" value="Сохранить вакансию">
+                    {% crispy form %}
                 </form>
-
 
 
               <h2 class="h4 pt-2 pb-3">Отклики - {{ vacancy.applications.count }}</h2>

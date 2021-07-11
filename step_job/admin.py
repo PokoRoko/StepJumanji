@@ -20,7 +20,6 @@ class CompanyAdmin(admin.ModelAdmin):
         "location",
         "employee_count",
     )
-    readonly_fields = ("owner",)
     fields = (
         "name",
         "owner",

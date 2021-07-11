@@ -12,11 +12,7 @@ class ApplicationForm(forms.ModelForm):
 
         self.helper = FormHelper()
         self.helper.form_method = 'post'
-        self.helper.add_input(Submit('submit', 'Submit'))
-
-        self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-lg-2'
-        self.helper.field_class = 'col-lg-8'
+        self.helper.add_input(Submit('submit', 'Оставить отклик'))
 
     class Meta:
         model = Application
@@ -29,7 +25,6 @@ class ApplicationForm(forms.ModelForm):
             "vacancy",
             "user",
         ]
-
         help_texts = {
             "written_username": _('Укажите как к вам обращаться'),
         }
@@ -41,11 +36,7 @@ class CompanyForm(forms.ModelForm):
 
         self.helper = FormHelper()
         self.helper.form_method = 'post'
-        self.helper.add_input(Submit('submit', 'Submit'))
-
-        self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-lg-2'
-        self.helper.field_class = 'col-lg-8'
+        self.helper.add_input(Submit('submit', 'Сохранить'))
 
     class Meta:
         model = Company
@@ -70,11 +61,7 @@ class VacancyForm(forms.ModelForm):
 
         self.helper = FormHelper()
         self.helper.form_method = 'post'
-        self.helper.add_input(Submit('submit', 'Submit'))
-
-        self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-lg-2'
-        self.helper.field_class = 'col-lg-8'
+        self.helper.add_input(Submit('submit', 'Сохранить вакансию'))
 
     class Meta:
         model = Vacancy

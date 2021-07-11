@@ -1,3 +1,6 @@
+{% load filters %}
+{% load crispy_forms_filters %}
+
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -18,11 +21,13 @@
                   <h1 class="h3 mb-3 font-weight-normal">Джуманджи</h1>
                   <p class="h5 font-weight-light">Войдите, чтобы управлять</p>
               </div>
-              {% for field in form %}
-                  <b class="text-muted">{{ field.name }}</b>
-                  <p>{{ field }}</p>
-              {% endfor %}
-              <button class="btn btn-primary btn-lg btn-block" type="submit">Войти</button>
+
+                  <b class="text-muted mt-3">{{ form.username.label_tag }}</b>
+                    <p class=mt-3">{{ form.username|addclass:"form-control" }}</p>
+                  <b class="text-muted mt-3">{{ form.password.label_tag }}</b>
+                    <p class=mt-3">{{ form.password|addclass:"form-control" }}</p>
+                  <button class="btn btn-primary btn-lg btn-block mt-3" type="submit">Войти</button>
+
           </form>
 
 
