@@ -3,8 +3,8 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from StepikJumanji.settings import (MEDIA_COMPANY_IMAGE_DIR,
-                                    MEDIA_SPECIALITY_IMAGE_DIR)
+from StepJumanji.settings import (MEDIA_COMPANY_IMAGE_DIR,
+                                  MEDIA_SPECIALITY_IMAGE_DIR)
 
 
 class Company(models.Model):

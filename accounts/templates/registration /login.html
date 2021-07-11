@@ -15,21 +15,22 @@
     <div class="row">
       <div class="col-8 col-lg-4 offset-2 offset-lg-4">
 
-
           <form method="post" class="form-signin pt-5" enctype="multipart/form-data" >{% csrf_token %}
-              <div class="col-8 col-lg-4 offset-2 offset-lg-4">
+              <div class="col-8 offset-2 ">
                   <h1 class="h3 mb-3 font-weight-normal">Джуманджи</h1>
-                  <p class="h5 font-weight-light">Войдите, чтобы управлять</p>
+                  <p class="h5 font-weight-light">Добро пожаловать</p>
               </div>
-
+                  {% if form.errors %}
+                      <div class="alert alert-danger">
+                      Введен неверный логин или пароль. Пожалуйста,попробуйте еще раз.
+                      </div>
+                  {% endif %}
                   <b class="text-muted mt-3">{{ form.username.label_tag }}</b>
                     <p class=mt-3">{{ form.username|addclass:"form-control" }}</p>
                   <b class="text-muted mt-3">{{ form.password.label_tag }}</b>
                     <p class=mt-3">{{ form.password|addclass:"form-control" }}</p>
                   <button class="btn btn-primary btn-lg btn-block mt-3" type="submit">Войти</button>
-
           </form>
-
 
         <div class="mt-4 text-center"><p>Нет аккаунта? <a href="{% url 'register' %}">Зарегистрируйтесь!</a></p></div>
       </div>

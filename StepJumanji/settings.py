@@ -40,8 +40,7 @@ MIDDLEWARE = [
 ]
 
 
-
-ROOT_URLCONF = 'StepikJumanji.urls'
+ROOT_URLCONF = 'StepJumanji.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -59,7 +58,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'StepikJumanji.wsgi.application'
+WSGI_APPLICATION = 'StepJumanji.wsgi.application'
 
 
 # Database
